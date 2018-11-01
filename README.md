@@ -32,6 +32,29 @@ print('\nBan Status')
 print(f'Community Ban: {banstatus.communityban}\nVac Ban: {banstatus.vacban}')
 ```
 
+Output:
+```
+C:\stmpy>py example.py
+Player Avatar
+https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/b7/b79e7adace1c659404920f78e0598a15f9c5073b.jpg
+
+Friend Steamid
+76561198017254602
+
+Stats for ValveTestApp260 [ID: 730]
+Total Kills: 19690
+Total Deaths: 18005
+730 Appid exists in list
+
+Recently Played
+Appid: 560380
+Icon URL: https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/560380/cb5162531011571b4028a06818a7be9154aa3458.jpg
+
+Ban Status
+Community Ban: False
+Vac Ban: False
+```
+
 # Player
 ```
 import stm
