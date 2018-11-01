@@ -61,6 +61,7 @@ import stm
 
 stmw = stm.stm('key')
 player = stmw.player(steamid=76561198348243540) # Get player by steamid
+
 # all
 player.steamid
 player.communityvisibilitystate
@@ -89,8 +90,10 @@ stmw = stm.stm('key')
 friendslist = stmw.friendslist(steamid=76561198348243540)
 print('Friend Steamid')
 print(f'Friend 0 Steamid {friendslist.list[0].steamid}')
+
 # all
 friendslist.list
+
 # all 2
 friendlist.list[0].steamid
 friendlist.list[0].relationship
