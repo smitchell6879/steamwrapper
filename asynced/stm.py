@@ -9,9 +9,12 @@ class stm:
             async with session.get(url) as resp:
                 return await resp.text()
 
-    async def player(self, steamid=None, customurl=None):
+    async def SteamIdByCustom(self, custom=None):
+        return json.loads(await self.fetch(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={custom}'))['response']['steamid']
+
+    async def player(self, steamid=None, custom=None):
         if not steamid:
-            steamid = json.loads(await self.fetch(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={steamid}'))['response']['steamid']
+            steamid = await self.SteamIdByCustom(custom=custom)
         r = await self.fetch(f'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.key}&steamids={steamid}')
         data = json.loads(r)
         data = data['response']['players'][0]
@@ -29,7 +32,9 @@ class stm:
                            data['realname'], data['primaryclanid'], data['timecreated'], data['personastateflags'], data['loccountrycode'],
                            data['locstatecode'])
 
-    async def friendslist(self, steamid=None, friends=[]):
+    async def friendslist(self, steamid=None, custom=None, friends=[]):
+        if not steamid:
+            steamid = await self.SteamIdByCustom(custom=custom)
         r = await self.fetch(f'http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.key}&steamid={steamid}&relationship=friend')
         data = json.loads(r)
         data = data['friendslist']['friends']
@@ -37,7 +42,9 @@ class stm:
             friends.append(SteamFriend(x['steamid'], x['relationship'], x['friend_since']))
         return SteamFriendsList(friends)
 
-    async def stats(self, steamid=None, appid=None, stats={}, gn=None):
+    async def stats(self, steamid=None, custom=None, appid=None, stats={}, gn=None):
+        if not steamid:
+            steamid = await self.SteamIdByCustom(custom=custom)
         r = await self.fetch(f'http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid={appid}&key={self.key}&steamid={steamid}')
         data = json.loads(r)
         gn = data['playerstats']['gameName']
@@ -46,7 +53,9 @@ class stm:
             stats[x['name']] = x['value']
         return SteamGameStats(gn, appid, stats)
 
-    async def gameslist(self, steamid=None, list=[], total=None):
+    async def gameslist(self, steamid=None, custom=None, list=[], total=None):
+        if not steamid:
+            steamid = await self.SteamIdByCustom(custom=custom)
         r = await self.fetch(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.key}&steamid={steamid}&format=json')
         data = json.loads(r)['response']
         total = data['game_count']
@@ -55,12 +64,16 @@ class stm:
             list.append(x['appid'])
         return SteamGamesList(total, list)
 
-    async def recentlyplayed(self, steamid=None):
+    async def recentlyplayed(self, steamid=None, custom=None):
+        if not steamid:
+            steamid = await self.SteamIdByCustom(custom=custom)
         r = await self.fetch(f'http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={self.key}&steamid={steamid}&format=json')
         data = json.loads(r)['response']['games'][0]
         return SteamRecentlyPlayed(data['appid'], data['name'], data['playtime_2weeks'], data['playtime_forever'], data['img_icon_url'], data['img_logo_url'])
 
-    async def checkban(self, steamid=None):
+    async def checkban(self, steamid=None, custom=None):
+        if not steamid:
+            steamid = await self.SteamIdByCustom(custom=custom)
         r = await self.fetch(f'http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key={self.key}&steamids={steamid}')
         data = json.loads(r)['players'][0]
         return SteamBanStatus(data['CommunityBanned'], data['VACBanned'], data['NumberOfVACBans'], data['DaysSinceLastBan'], data['NumberOfGameBans'], data['EconomyBan'])
