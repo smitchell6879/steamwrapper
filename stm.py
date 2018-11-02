@@ -4,9 +4,12 @@ class stm:
     def __init__(self, key):
         self.key = key
 
-    def player(self, steamid=None, customurl=None):
+    def SteamIdByCustom(self, custom=None):
+        return json.loads(requests.get(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={custom}').content)['response']['steamid']
+
+    def player(self, steamid=None, custom=None):
         if not steamid:
-            steamid = json.loads(requests.get(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={steamid}'))['response']['steamid']
+            steamid = self.SteamIdByCustom(custom=custom)
         r = requests.get(f'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.key}&steamids={steamid}').content
         data = json.loads(r)
         data = data['response']['players'][0]
@@ -24,7 +27,9 @@ class stm:
                            data['realname'], data['primaryclanid'], data['timecreated'], data['personastateflags'], data['loccountrycode'],
                            data['locstatecode'])
 
-    def friendslist(self, steamid=None, friends=[]):
+    def friendslist(self, steamid=None, custom=None, friends=[]):
+        if not steamid:
+            steamid = self.SteamIdByCustom(custom=custom)
         r = requests.get(f'http://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={self.key}&steamid={steamid}&relationship=friend').content
         data = json.loads(r)
         data = data['friendslist']['friends']
@@ -32,7 +37,9 @@ class stm:
             friends.append(SteamFriend(x['steamid'], x['relationship'], x['friend_since']))
         return SteamFriendsList(friends)
 
-    def stats(self, steamid=None, appid=None, stats={}, gn=None):
+    def stats(self, steamid=None, custom=None, appid=None, stats={}, gn=None):
+        if not steamid:
+            steamid = self.SteamIdByCustom(custom=custom)
         r = requests.get(f'http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/?appid={appid}&key={self.key}&steamid={steamid}').content
         data = json.loads(r)
         gn = data['playerstats']['gameName']
@@ -41,7 +48,9 @@ class stm:
             stats[x['name']] = x['value']
         return SteamGameStats(gn, appid, stats)
 
-    def gameslist(self, steamid=None, list=[], total=None):
+    def gameslist(self, steamid=None, custom=None, list=[], total=None):
+        if not steamid:
+            steamid = self.SteamIdByCustom(custom=custom)
         r = requests.get(f'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={self.key}&steamid={steamid}&format=json').content
         data = json.loads(r)['response']
         total = data['game_count']
@@ -50,12 +59,16 @@ class stm:
             list.append(x['appid'])
         return SteamGamesList(total, list)
 
-    def recentlyplayed(self, steamid=None):
+    def recentlyplayed(self, steamid=None, custom=None):
+        if not steamid:
+            steamid = self.SteamIdByCustom(custom=custom)
         r = requests.get(f'http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key={self.key}&steamid={steamid}&format=json').content
         data = json.loads(r)['response']['games'][0]
         return SteamRecentlyPlayed(data['appid'], data['name'], data['playtime_2weeks'], data['playtime_forever'], data['img_icon_url'], data['img_logo_url'])
 
-    def checkban(self, steamid=None):
+    def checkban(self, steamid=None, custom=None):
+        if not steamid:
+            steamid = self.SteamIdByCustom(custom=custom)
         r = requests.get(f'http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key={self.key}&steamids={steamid}').content
         data = json.loads(r)['players'][0]
         return SteamBanStatus(data['CommunityBanned'], data['VACBanned'], data['NumberOfVACBans'], data['DaysSinceLastBan'], data['NumberOfGameBans'], data['EconomyBan'])
