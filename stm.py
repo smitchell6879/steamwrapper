@@ -4,10 +4,21 @@ class stm:
     def __init__(self, key):
         self.key = key
 
-    def player(self, steamid=None):
+    def player(self, steamid=None, customurl=None):
+        if not steamid:
+            steamid = json.loads(requests.get(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={steamid}'))['response']['steamid']
         r = requests.get(f'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key={self.key}&steamids={steamid}').content
         data = json.loads(r)
         data = data['response']['players'][0]
+        required = ['steamid', 'communityvisibilitystate', 'profilestate', 'personaname', 'lastlogoff', 'commentpermission', 'avatar', 'avatarmedium', 'avatarfull'
+                    'personastate', 'realname', 'primaryclanid', 'timecreated', 'personastateflags', 'loccountrycode', 'locstatecode']
+        for x in data:
+            try:
+                required.remove(x)
+            except:
+                pass
+        for x in required:
+            data[x] = None
         return SteamPlayer(data['steamid'], data['communityvisibilitystate'], data['profilestate'], data['personaname'], data['lastlogoff'],
                            data['commentpermission'], data['avatar'], data['avatarmedium'], data['avatarfull'], data['personastate'],
                            data['realname'], data['primaryclanid'], data['timecreated'], data['personastateflags'], data['loccountrycode'],
