@@ -1,6 +1,11 @@
 # stmpy
 API wrapper for Steam written in Python.
 
+# Git Clone
+```
+git clone https://github.com/truedl/steamwrapper/
+```
+
 # example.py
 ```
 import stm
