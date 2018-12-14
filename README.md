@@ -1,4 +1,4 @@
-# stmpy
+# steamwrapper
 API wrapper for Steam written in Python.
 
 # Git Clone
@@ -8,9 +8,9 @@ git clone https://github.com/truedl/steamwrapper/
 
 # example.py
 ```
-import stm
+import steamwrapper
 
-stmw = stm.stm('key')
+stmw = steamwrapper.wrapper('key')
 player = stmw.player(steamid=76561198348243540)
 print('Player Avatar')
 print(player.avatar)
@@ -62,9 +62,9 @@ Vac Ban: False
 
 # Player
 ```
-import stm
+import steamwrapper
 
-stmw = stm.stm('key')
+stmw = steamwrapper.wrapper('key')
 player = stmw.player(steamid=76561198348243540) # Get player by steamid
 
 # all
@@ -88,9 +88,9 @@ player.locstatecode
 
 # Friends List
 ```
-import stm
+import steamwrapper
 
-stmw = stm.stm('key')
+stmw = steamwrapper.wrapper('key')
 
 friendslist = stmw.friendslist(steamid=76561198348243540)
 print('Friend Steamid')
@@ -107,9 +107,9 @@ friendlist.list[0].friend_since
 
 # Game Stats
 ```
-import stm
+import steamwrapper
 
-stmw = stm.stm('key')
+stmw = steamwrapper.wrapper('key')
 
 stats = stmw.stats(steamid=76561198348243540, appid=730)
 
@@ -121,9 +121,9 @@ stats.stats
 
 # Games List
 ```
-import stm
+import steamwrapper
 
-stmw = stm.stm('key')
+stmw = steamwrapper.wrapper('key')
 
 gameslist = stmw.gameslist(steamid=76561198348243540)
 if 730 in gameslist.list:
@@ -136,9 +136,9 @@ gameslist.list
 
 # Recently Played
 ```
-import stm
+import steamwrapper
 
-stmw = stm.stm('key')
+stmw = steamwrapper.wrapper('key')
 
 rplayed = stmw.recentlyplayed(steamid=76561198348243540)
 print('Recently Played')
@@ -155,9 +155,9 @@ rplayed.logo_url
 
 # Ban Check
 ```
-import stm
+import steamwrapper
 
-stmw = stm.stm('key')
+stmw = steamwrapper.wrapper('key')
 
 banstatus = stmw.checkban(steamid=76561198348243540)
 print('Ban Status')
