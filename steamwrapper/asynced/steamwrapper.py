@@ -3,6 +3,7 @@ import aiohttp
 class stm:
     def __init__(self, key):
         self.key = key
+        self.last = [None, None]
 
     async def fetch(self, url):
         async with aiohttp.ClientSession() as session:
@@ -12,7 +13,11 @@ class stm:
     async def SteamIdByCustom(self, custom=None):
         """ Get Steam ID By Steam Custom, Returned: SteamID """
 
-        return await self.fetch(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={custom}')['response']['steamid']
+        if self.last[0] == custom:
+            return self.last[1]
+        else:
+            self.last = [custom, await self.fetch(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={custom}')['response']['steamid']]
+            return self.last[1]
 
     async def player(self, steamid=None, custom=None):
         """ Get information about steam user by steamid or custom, Returned: SteamPlayer Class """
