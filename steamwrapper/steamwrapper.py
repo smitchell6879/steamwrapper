@@ -3,11 +3,16 @@ import requests
 class wrapper:
     def __init__(self, key):
         self.key = key
+        self.last = [None, None]
 
     def SteamIdByCustom(self, custom=None):
         """ Get Steam ID By Steam Custom, Returned: SteamID """
 
-        return requests.get(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={custom}').json()['response']['steamid']
+        if self.last[0] == custom:
+            return self.last[1]
+        else:
+            self.last = [custom, requests.get(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={custom}').json()['response']['steamid']]
+            return self.last[1]
 
     def player(self, steamid=None, custom=None):
         """ Get information about steam user by steamid or custom, Returned: SteamPlayer Class """
