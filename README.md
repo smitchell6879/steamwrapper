@@ -1,9 +1,9 @@
 # steamwrapper
-API wrapper for Steam written in Python.
-
-# Git Clone
+API wrapper for Steam written in Python.<br/>
+<b>Get your api key here:</b> https://steamcommunity.com/dev/apikey<br/>
+<b>Install steamwrapper</b>
 ```
-git clone https://github.com/truedl/steamwrapper/
+pip install steamwrapper
 ```
 
 # example.py
