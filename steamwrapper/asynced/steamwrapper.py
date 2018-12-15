@@ -1,6 +1,6 @@
 import aiohttp
 
-class stm:
+class wrapper:
     def __init__(self, key):
         self.key = key
         self.last = [None, None]
