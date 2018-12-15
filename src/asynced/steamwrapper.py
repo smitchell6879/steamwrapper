@@ -10,12 +10,12 @@ class stm:
                 return await resp.json()
 
     async def SteamIdByCustom(self, custom=None):
-        """ Get Steam ID By Steam Custom """
+        """ Get Steam ID By Steam Custom, Returned: SteamID """
 
         return await self.fetch(f'http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.key}&vanityurl={custom}')['response']['steamid']
 
     async def player(self, steamid=None, custom=None):
-        """ Get information about steam user by steamid or custom """
+        """ Get information about steam user by steamid or custom, Returned: SteamPlayer Class """
 
         if not steamid:
             steamid = await self.SteamIdByCustom(custom=custom)
@@ -35,7 +35,7 @@ class stm:
                            data['locstatecode'])
 
     async def friendslist(self, steamid=None, custom=None, friends=[]):
-        """ Get user friendlist by steamid or custom """
+        """ Get user friendlist by steamid or custom, Returned: SteamFriendsList Class """
 
         if not steamid:
             steamid = await self.SteamIdByCustom(custom=custom)
@@ -45,7 +45,7 @@ class stm:
         return SteamFriendsList(friends)
 
     async def stats(self, steamid=None, custom=None, appid=None, stats={}, gn=None):
-        """ Get user stats by appid and steamid/custom """
+        """ Get user stats by appid and steamid/custom, Returned: SteamGameStats Class """
 
         if not steamid:
             steamid = await self.SteamIdByCustom(custom=custom)
@@ -56,7 +56,7 @@ class stm:
         return SteamGameStats(gn, appid, stats)
 
     async def gameslist(self, steamid=None, custom=None, list=[], total=None):
-        """ Get user gameslist by steamid or custom """
+        """ Get user gameslist by steamid or custom, Returned: SteamGamesList Class """
 
         if not steamid:
             steamid = await self.SteamIdByCustom(custom=custom)
@@ -67,7 +67,7 @@ class stm:
         return SteamGamesList(total, list)
 
     async def recentlyplayed(self, steamid=None, custom=None):
-        """ Get user recently game played by steamid or custom """
+        """ Get user recently game played by steamid or custom, Returned: SteamRecentlyPlayed Class """
 
         if not steamid:
             steamid = await self.SteamIdByCustom(custom=custom)
@@ -75,7 +75,7 @@ class stm:
         return SteamRecentlyPlayed(data['appid'], data['name'], data['playtime_2weeks'], data['playtime_forever'], data['img_icon_url'], data['img_logo_url'])
 
     async def checkban(self, steamid=None, custom=None):
-        """ Get user ban's information by steamid or custom """
+        """ Get user ban's information by steamid or custom, Returned: SteamBanStatus Class """
 
         if not steamid:
             steamid = await self.SteamIdByCustom(custom=custom)
